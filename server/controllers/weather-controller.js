@@ -2,19 +2,26 @@ const axios = require('axios');
 
 class WeatherController {
     static findWeatherLocation (req,res) { 
-        axios.get('https://api.openweathermap.org/data/2.5/group', {
+        axios.get('https://ipinfo.io/', {
             params: {
-                id: process.env.CITYID,
-                appid: `${process.env.APPID}` 
+                token: process.env.LOCATIONID
             }
         })
-        .then(function (response) {
-        res.status(200).json(response.data.list)
+        .then(function(response) {
+            const city = response.data.city;
+            
+            return axios.get('https://api.openweathermap.org/data/2.5/weather', {
+                params: {
+                    q: city,
+                    appid: process.env.APPID
+                }
+            })
         })
-        .catch(function (error) {
-        const status = error.response.status
-        const msg = error.response.statusText
-        res.status(status).json({msg:msg})
+        .then(function (response) {
+            res.status(200).json(response.data)
+        })
+        .catch(function(err) {
+            res.status()
         })
     }
 }
