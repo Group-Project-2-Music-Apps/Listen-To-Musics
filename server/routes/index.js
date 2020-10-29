@@ -13,4 +13,4 @@ router.use(authentication);
 router.use('/songs',SongRoute);
 router.use('/weathers',WeatherRoutes);
 
-module.exports = route;
+module.exports = router;
