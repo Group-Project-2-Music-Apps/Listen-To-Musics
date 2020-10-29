@@ -1,12 +1,21 @@
-'use strict'
+
+require('dotenv').config();
+
 
 const express = require('express');
 const app = express();
-const port = 3000;
-const lyricRouter = require('./routers/lyric-routes.js');
+const port = 3050;
+const cors = require('cors');
+const router = require('./routes');
+const errorHandler = require('./middlewares/errorHandler')
 
-app.use(express.urlencoded({ extended: true }))
 
-app.use(lyricRouter);
+app.use(cors());
+app.use(express.urlencoded({extended:false}));
+app.use(express.json());
+app.use('/',router);
+app.use(errorHandler);
 
-app.listen(port, ()=> console.log(`listening to http://localhost:${port}`));
+app.listen(port , () => {
+    console.log(`app is running on ${port}`);
+})
