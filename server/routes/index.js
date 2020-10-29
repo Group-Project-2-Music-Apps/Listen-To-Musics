@@ -1,16 +1,13 @@
 const router = require('express').Router();
 const UserController = require('../controllers/UserController');
-const authentication = require('../middlewares/authentication');
 const SongRoute = require('./SongRoute');
 const WeatherRoutes = require('./WeatherRoute');
 
+route.post('/users/register',UserController.create);
+route.post('/users/login',UserController.login);
+route.post('/users/googleSign',UserController.googleSign)
+route.use('/songs',SongRoute);
+route.use('/weathers',WeatherRoutes);
 
-router.post('/signup', UserController.signup);
-router.post('/login', UserController.login);
-router.post('/googleLogin', UserController.googleLogin);
-router.use(authentication);
+module.exports = route;
 
-router.use('/songs',SongRoute);
-router.use('/weathers',WeatherRoutes);
-
-module.exports = router;

@@ -1,16 +1,26 @@
-module.exports = function (err, req, res, next) {
-  let status = err.status || 500
-  let msg = err.msg || 'internel server error'
-  if(err.name === 'SequelizeValidationError'){
-      status = 400;
-      let errors = err.errors.map(x => {
-          return x.message
-      })
-      msg = errors.join(', ')
-  } else if (err.name === 'SequelizeUniqueConstraintError'){
-      status = 400;
-      msg = 'Email has already taken'
-  }
-  res.status(status).json({ msg });
+const errorHandler = (err, req, res, next) => {  
+    let errors = []
+    let code = 500
 
-}
+    switch(err.name) {
+      case 'SequelizeValidationError':
+        err.errors.forEach(error => errors.push(error.message))
+        code = 400
+        break;
+      case 'SequelizeUniqueConstraintError':
+        errors.push(`this email has been used`);
+        statusCode = 400;
+        break;
+      case 'JsonWebTokenError':
+        errors.push(`you do not have access to this page`);
+        statusCode = 401;
+        break;
+      default:
+        errors.push(err.msg);
+        code = err.code || 500
+  }
+  
+    res.status(code).json({errors});
+  }
+  
+  module.exports = errorHandler

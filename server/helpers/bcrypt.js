@@ -10,3 +10,4 @@ function comparePass(pass,hashed) {
 }
 
 module.exports = {hashPass,comparePass};
+

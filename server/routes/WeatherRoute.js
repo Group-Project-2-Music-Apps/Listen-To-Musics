@@ -10,15 +10,21 @@ route.get('/',(req,res,next) => {
       })
     .then(response =>{
         city = response.data.city;
+        console.log(city)
         
         return axios({
             method:'GET',
             url:`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=ca6bfb642b4c79ec6acdbbe25d82db3b`
+          
         })
+      
     })
+    
     .then(response => {
         weatherData = response.data
         res.status(200).json({weatherData});
     })
     .catch(err => next(err));
 })
+
+module.exports = route
