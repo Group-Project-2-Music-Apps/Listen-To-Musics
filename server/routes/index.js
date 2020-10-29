@@ -4,10 +4,11 @@ const authentication = require('../middlewares/authentication');
 const SongRoute = require('./SongRoute');
 const WeatherRoutes = require('./WeatherRoute');
 
-router.use(authentication);
-router.post('/signup', UserController.signup);
-router.post('/login', UserController.login);
-router.post('/googleLogin', UserController.googleLogin);
+
+route.post('/signup', UserController.signup);
+route.post('/login', UserController.login);
+route.post('/googleLogin', UserController.googleLogin);
+route.use(authentication);
 
 route.use('/songs',SongRoute);
 route.use('/weathers',WeatherRoutes);
