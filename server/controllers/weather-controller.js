@@ -9,7 +9,6 @@ class WeatherController {
             }
         })
         .then(function (response) {
-        console.log(response.data.list);
         res.status(200).json(response.data.list)
         })
         .catch(function (error) {
