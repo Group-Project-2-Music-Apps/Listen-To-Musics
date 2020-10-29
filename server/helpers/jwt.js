@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
 
-function genToken(payload) {
+function signToken(payload) {
     return jwt.sign(payload,"secret")
 }
 
-function vefToken(token) {
+function verifyToken(token) {
     return jwt.verify(token,"secret")
 }
 
-module.exports = {genToken,vefToken};
+module.exports = {signToken,verifyToken};
