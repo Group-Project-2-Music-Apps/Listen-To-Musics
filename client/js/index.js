@@ -1,15 +1,15 @@
 const SERVER = "http://localhost:3000"
 
 $(document).ready(function(){
-    const token = localStorage.getItem("token")
-    if(token){
+    const accessToken = localStorage.getItem("accessToken")
+    if(accessToken){
         $("#home-page").show()
         $("#login-page").hide()
         $("#signup-page").hide()
     } else{
         $("#home-page").hide()
         $("#login-page").show()
-        $("#signup-page").show()
+        $("#signup-page").hide()
     }
 })
 
@@ -20,7 +20,7 @@ function login(e) {
     const email = $('#login-email').val()
     const password = $('#login-password').val()
 
-    console.log(email,password)
+    console.log(email, password)
     $.ajax({
         method:"POST",
         url: SERVER + "/login",
@@ -29,8 +29,8 @@ function login(e) {
             password
         }
     }).done(res => {
-        const token = res.token
-        localStorage.setItem("token", token)
+        const accessToken = res.accessToken
+        localStorage.setItem("accessToken", accessToken)
         $("#login-page").hide()
         $("#signup-page").hide()
         $("#home-page").show()
@@ -38,6 +38,35 @@ function login(e) {
         console.log(err)
     })
 }
+
+function onSignIn(googleUser){
+    const google_token = googleUser.getAuthResponse().id_token;
+    
+    $.ajax({
+        method:"POST",
+        url: SERVER + "/googleLogin",
+        data:{
+            google_token
+        }
+    }).done(res => {
+        console.log(res)
+        const accessToken = res.accessToken
+        localStorage.setItem("accessToken", google_token)
+        $("#login-page").hide()
+        $("#signup-page").hide()
+        $("#home-page").show()
+    }).fail(err => {
+        console.log(err)
+    })
+}
+
+// function signOut() {
+//     var auth2 = gapi.auth2.getAuthInstance();
+//     auth2.signOut().then(function () {
+//       console.log('User signed out.');
+//     });
+// }
+
 
 function signup(e) {
     e.preventDefault()
@@ -61,25 +90,6 @@ function signup(e) {
     })
 }
 
-function onSignIn(googleUser){
-    const google_token = googleUser.getAuthResponse().id_token;
-    
-    $.ajax({
-        method:"POST",
-        url: SERVER + "/googlelogin",
-        data:{
-            google_token
-        }
-    }).done(res => {
-        const token = res.token
-        localStorage.setItem("token", google_token)
-        $("#login-page").hide()
-        $("#home-page").show()
-    }).fail(err => {
-        console.log(err)
-    })
-}
-
 function signupPage(){
     $("#signup-page").show()
     $("#login-page").hide()
@@ -89,5 +99,9 @@ function signupPage(){
 function logout(){
     $("#login-page").show()
     $("#home-page").hide()
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
 }

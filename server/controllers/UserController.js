@@ -4,7 +4,7 @@ const { signToken } = require('../helpers/jwt');
 const {OAuth2Client} = require('google-auth-library');
 
 class UserController {
-    static async signup(req,res){
+    static async signup(req,res,next){
         let { email, password } = req.body;
         
         const newUser = {
@@ -13,12 +13,12 @@ class UserController {
         try { 
             const data = await User.create(newUser)
             res.status(201).json(data)
-        } catch (error){
-            res.status(400).json(error)
+        } catch (err){
+            next(err)
         }
     }
 
-    static async login(req,res){
+    static async login(req, res, next){
         try { 
             const user = await User.findOne({
                 where: {
@@ -36,47 +36,46 @@ class UserController {
                     message: 'Wrong email/password'
                 })
             } else {
-                const token = signToken({
+                const accessToken = signToken({
                     id: user.id,
                     email: user.email
                 })
 
-                res.status(200).json({token});
+                res.status(200).json({accessToken});
             }
-        } catch (error){
-            console.log(error)
-            res.status(500).json(error)
+        } catch (err){
+            next(err)
         }
     }
 
-    static googleLogin(req, res, next){
-        let { google_token } = req.body;
+    static googleLogin(req, res, next) {
+        let { google_token } = req.body
         const client = new OAuth2Client(process.env.CLIENT_ID);
-        let email = "";
-
-        client.verifyIdToken({
-            idToken: google_token,
-            audience: process.env.CLIENT_ID
-        })
-        .then(ticket => {
-            let payload = ticket.getPayload();
-            return User.findOne({where : { email:payload.email}})
-        })
-        .then(user=> {
-            if(user){
-
-            } else {
-                var userObj = {
-                    email,
-                    password:'Apaan sih'
+        verify()
+        async function verify() {
+            try {
+                const ticket = await client.verifyIdToken({
+                    idToken: google_token,
+                    audience: process.env.CLIENT_ID,
+                });
+                const payload = ticket.getPayload();
+                const user = await User.findOne({
+                    where: {
+                        email: payload.email
+                    }
+                })
+                if (!user) {
+                    user = await User.create({
+                        email: payload.email,
+                        password: google_token
+                    })
                 }
-                return User.create(userObj)
+                let accessToken = signToken({ id: user.id, email: user.email })
+                res.status(200).json({ accessToken })
+            } catch (err) {
+                next(err)
             }
-        })
-        .then(dataUser => {
-            let token = signToken({id: dataUser.id, email: dataUser.email})
-            return res.status(200).json({token})
-        })
+        }
     }
 }
 

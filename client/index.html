@@ -46,9 +46,10 @@
                                 </div>
                                 <button type="submit" class="btn btn-style mt-3">Log In</button>
                             </form>
-                            <p class="already">Don't you have any account? <a onclick="signupPage()">Sign Up</a>
-                            <br><br>Login with <div class="g-signin2" data-onsuccess="onSignIn"></div></p> 
-                            
+                            <p class="already">Don't you have any account? <a onclick="signupPage()">Sign Up</a> <br> <a href="#" onclick="signOut();">Sign out</a></p> 
+                            <hr>
+                            <p class="already">Or Login with <button class="g-signin2" data-onsuccess="onSignIn"></button></p> 
+                            <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
                             <!-- <p class="already">OR</p>
                              <center><div class="g-signin2" data-onsuccess="onSignIn"></div></center></p> -->
                         </div>
@@ -119,9 +120,8 @@
     </section>
 
     <!-- all js -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script src="js/moment.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/index.js"></script>
     <!-- //all js -->
 </body>
