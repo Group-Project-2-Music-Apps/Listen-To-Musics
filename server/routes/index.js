@@ -1,4 +1,4 @@
-const route = require('express').Router();
+const router = require('express').Router();
 const UserController = require('../controllers/UserController');
 const SongRoute = require('./SongRoute');
 const WeatherRoutes = require('./WeatherRoute');
