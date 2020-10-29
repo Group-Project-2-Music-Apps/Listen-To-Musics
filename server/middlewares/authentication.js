@@ -1,32 +1,20 @@
-const { verifyToken } = require('../helpers/jwt');
-const { User } = require('../models');
+const {vefToken} = require('../helpers/jwt');
+const {User} = require('../models');
 
-async function authentication(req, res, next){
-    const { token } = req.headers;
-    
+async function authentication(req,res,next) {
     try {
-        if(!token){
-            throw { msg: 'Authentication failed', status: 401 }
-        } else {
-            const decoded = verifyToken(token);
-            const user = await User.findOne({
-                where: {
-                    email: decoded.email
-                }
-            })
-
-            if(!user){
-                throw { msg: 'Authentication failed', status: 401 }
-            } else {
-                req.loggedInUser = decoded;
-                next()
+        let verified = vefToken(req.headers.token);
+        let user = await User.findOne({
+            where:{
+                email:verified.email
             }
-        }
-    } catch (err) {
-        const status = err.status || 500;
-        const msg = err.msg || 'Internal Server Error';
-        res.status(status).json({error : msg})
+        })
+        if(!user) throw ({msg:'authentication failed',code:403})
+        req.userData = verified;
+        next();
+
+    } catch(err) {
+        next(err);
     }
 }
-
 module.exports = authentication;
