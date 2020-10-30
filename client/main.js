@@ -194,6 +194,7 @@ function fetchMusic(){
           <h5 class="mt-0 mb-0">${music.title}</h5>
           <span class="text-muted">${music.artist}</span> 
           <span class="text-muted">${music.album}</span>
+          <br>
           <audio controls>
           <source src="${music.preview}" type="audio/ogg">
           </audio>
@@ -212,6 +213,7 @@ function fetchMusic(){
                   <div class="modal-body">
                     ${music.lyrics}
                   </div>
+                 
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
