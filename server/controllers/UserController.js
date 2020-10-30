@@ -6,7 +6,7 @@ const {OAuth2Client} = require('google-auth-library');
 class UserController {
     
     static create(req,res,next) {
-        const {email,password} = req.body;
+        const { email,password } = req.body;
         const newObj = {email,password};
         User.create(newObj)
         .then(user => {

@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "postgres",
-    "password": "nothinglasts123",
-    "database": "LalalaApp",
+    "password": "saragih21!",
+    "database": "Music-DB",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
