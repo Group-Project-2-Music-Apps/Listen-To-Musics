@@ -46,7 +46,7 @@ function login(event) {
   })
   .done(data => {
     localStorage.setItem("token", data.token)
-    showSuccessToastMessage('Login successful')
+    showSuccessToastMessage('Welcome!')
     checkLogin()
   })
   .fail(err => {
@@ -88,6 +88,7 @@ function onSignIn(googleUser) {
   })
   .done(data => {
     localStorage.setItem("token", data.token)
+    showSuccessToastMessage('Welcome!')
     console.log(data.token,'ini token')
     checkLogin()
   })
@@ -103,6 +104,7 @@ function logout() {
   const auth2 = gapi.auth2.getAuthInstance();
   auth2.signOut()
   .then( () => {
+    showSuccessToastMessage('Goodbye! See you next time!')
     console.log('User signed out.');
   })
   .catch(err =>{
@@ -286,7 +288,7 @@ function addMusic(event){
 function deleteMusic(id) {
   Swal.fire({
     title: 'Are you sure?',
-    text: "You won't be able to revert this!",
+    text: "You won't be able to play this music again!",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
@@ -308,7 +310,7 @@ function deleteMusic(id) {
       .done(data => {
         Swal.fire(
           'Deleted!',
-          'Your music has been deleted.',
+          'Your music has been deleted!',
           'success'
         )
         fetchMusic()
