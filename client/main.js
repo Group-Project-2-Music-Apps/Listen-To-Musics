@@ -63,6 +63,7 @@ function login(event) {
 function checkLogin() {
   if (localStorage.token) {
     $('#home-page').show()
+    $("#Lyric-page").show()
     $('#login-page').hide()
     $('#register-page').hide()
     $("#add-page").hide()
@@ -74,6 +75,7 @@ function checkLogin() {
     $('#register-page').hide()
     $("#add-page").hide()
     $("#search-page").hide()
+    $("#Lyric-page").hide()
   }
 }
 
@@ -354,8 +356,8 @@ let songname = null
  
 function getLyric(event){
   event.preventDefault()
-  artist = $('#inputArtist').val()
-  songname = $('#inputTitle').val()
+  artist = $('#add-artist').val()
+  songname = $('#add-title').val()
   console.log(artist, songname);
   $.ajax({
     method: "GET",
@@ -367,9 +369,9 @@ function getLyric(event){
   .done(result => {
     const lyrics = result.lyrics.lyrics
     console.log(lyrics);
-    $('#showLyrics').append(`
+    $('#add-lyrics').append(`
       ${lyrics}
-    `)
+     `)
     if(!result.lyrics.lyrics) {
       $('#add-lyrics').val('lyric is unavailable at this moment')
     } else {
