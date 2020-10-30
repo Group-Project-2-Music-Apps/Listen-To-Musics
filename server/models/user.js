@@ -43,7 +43,6 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    gender: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'User',
