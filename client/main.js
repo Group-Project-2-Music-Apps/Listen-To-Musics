@@ -352,7 +352,11 @@ function getWeather() {
 let artist = null
 let songname = null
  
-function getLyric(){
+function getLyric(event){
+  event.preventDefault()
+  artist = $('#inputArtist').val()
+  songname = $('#inputTitle').val()
+  console.log(artist, songname);
   $.ajax({
     method: "GET",
     url: `http://localhost:3070/songs/${artist}/${songname}`,
@@ -361,6 +365,11 @@ function getLyric(){
     }
   })
   .done(result => {
+    const lyrics = result.lyrics.lyrics
+    console.log(lyrics);
+    $('#showLyrics').append(`
+      ${lyrics}
+    `)
     if(!result.lyrics.lyrics) {
       $('#add-lyrics').val('lyric is unavailable at this moment')
     } else {
@@ -368,6 +377,7 @@ function getLyric(){
     }
   })
   .fail(err => {
+    console.log(err);
     showErrorToastMessage('lyrics not found')
   })
 }
@@ -375,6 +385,7 @@ function getLyric(){
  
 function spotify(){
   const track = $("#search-keyword").val();
+  console.log(localStorage.getItem('token'))
   $.ajax({
     method: "GET",
     url: `http://localhost:3070/songs/search/${track}`,
