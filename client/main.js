@@ -35,6 +35,7 @@ function login(event) {
   event.preventDefault()
   let email = $("#login-email").val();
   let password = $("#login-password").val();
+  const token = localStorage.getItem('token')
 
   $.ajax({
     url: `${baseUrl}/users/login`,
@@ -319,10 +320,13 @@ function deleteMusic(id) {
 }
 
 function getWeather() {
+  const token = localStorage.getItem('token')
   $.ajax({
     url: `${baseUrl}/weathers/`,
     method: 'GET',
-
+    headers: {
+      token: token
+    }
   })
   .done(data => {
     $("#icon").empty();
