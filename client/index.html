@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="google-signin-client_id" content="752137312998-3tnsnm0ci53910fgr3ud1uoormpcs6l1.apps.googleusercontent.com">
+  <meta name="google-signin-client_id" content="245830890681-sm1c64iscboj8g0p5b2l8ke72usn14ro.apps.googleusercontent.com">
   <title>Welcome</title>
   <link href="https://fonts.googleapis.com/css?family=Alata" rel='stylesheet'>
   
@@ -132,6 +132,31 @@
       </ul>
     </div>
   </section>
+
+  <!-- <section id="Lyric-page">
+    <form action="">
+      <input type="text" id="inputArtist" placeholder="artist">
+      <input type="text" id="inputTitle" placeholder="title">
+      <button class="btn btn-danger"  onclick="getLyric(event)" data-toggle="modal" data-target="#exampleModal">Lyrics</button>
+      <div class="modal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" id="">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section> -->
   
 <!-- add music form-->
 <section class="container" id="add-page">
@@ -197,6 +222,7 @@
       <div class="form-group">
         <label for="add-lyrics">Add Lyrics</label>
         <textarea class="form-control" id="add-lyrics" cols="10" rows="3"></textarea>
+        <button onclick="getLyric(event)">Get Lyric</button>
       </div>
         <button type="submit" class="btn btn-primary btn-block">Submit</button>
     </form>

@@ -35,6 +35,7 @@ function login(event) {
   event.preventDefault()
   let email = $("#login-email").val();
   let password = $("#login-password").val();
+  const token = localStorage.getItem('token')
 
   $.ajax({
     url: `${baseUrl}/users/login`,
@@ -59,9 +60,12 @@ function login(event) {
   })
 }
 
+
+
 function checkLogin() {
   if (localStorage.token) {
     $('#home-page').show()
+    $("#Lyric-page").show()
     $('#login-page').hide()
     $('#register-page').hide()
     $("#add-page").hide()
@@ -73,29 +77,28 @@ function checkLogin() {
     $('#register-page').hide()
     $("#add-page").hide()
     $("#search-page").hide()
+    $("#Lyric-page").hide()
   }
 }
 
 function onSignIn(googleUser) {
-  var tokenGoogle = googleUser.getAuthResponse().id_token;
+  var google_token = googleUser.getAuthResponse().id_token;
 
   $.ajax({
     url: baseUrl + '/users/googleSign',
     method: 'POST',
     data: {
-      tokenGoogle
+      google_token
     }
   })
   .done(data => {
     localStorage.setItem("token", data.token)
-    console.log(data.token,'ini token')
     checkLogin()
   })
   .fail(err => {
     console.log(err)
   })
 }
-
 
 function logout() {
   localStorage.clear()
@@ -319,10 +322,13 @@ function deleteMusic(id) {
 }
 
 function getWeather() {
+  const token = localStorage.getItem('token')
   $.ajax({
     url: `${baseUrl}/weathers/`,
     method: 'GET',
-
+    headers: {
+      token: token
+    }
   })
   .done(data => {
     $("#icon").empty();
@@ -348,7 +354,11 @@ function getWeather() {
 let artist = null
 let songname = null
  
-function getLyric(){
+function getLyric(event){
+  event.preventDefault()
+  artist = $('#add-artist').val()
+  songname = $('#add-title').val()
+  console.log(artist, songname);
   $.ajax({
     method: "GET",
     url: `http://localhost:3070/songs/${artist}/${songname}`,
@@ -357,6 +367,11 @@ function getLyric(){
     }
   })
   .done(result => {
+    const lyrics = result.lyrics.lyrics
+    console.log(lyrics);
+    $('#add-lyrics').append(`
+      ${lyrics}
+     `)
     if(!result.lyrics.lyrics) {
       $('#add-lyrics').val('lyric is unavailable at this moment')
     } else {
@@ -364,6 +379,7 @@ function getLyric(){
     }
   })
   .fail(err => {
+    console.log(err);
     showErrorToastMessage('lyrics not found')
   })
 }
@@ -371,6 +387,7 @@ function getLyric(){
  
 function spotify(){
   const track = $("#search-keyword").val();
+  console.log(localStorage.getItem('token'))
   $.ajax({
     method: "GET",
     url: `http://localhost:3070/songs/search/${track}`,

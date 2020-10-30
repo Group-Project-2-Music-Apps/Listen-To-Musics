@@ -6,7 +6,7 @@ const {OAuth2Client} = require('google-auth-library');
 class UserController {
     
     static create(req,res,next) {
-        const {email,password} = req.body;
+        const { email,password } = req.body;
         const newObj = {email,password};
         User.create(newObj)
         .then(user => {
@@ -43,41 +43,36 @@ class UserController {
         })
     }
 
-    static googleSign(req,res,next) {
-        let email = null;
-        const client = new OAuth2Client("752137312998-3tnsnm0ci53910fgr3ud1uoormpcs6l1.apps.googleusercontent.com");
-        client.verifyIdToken({
-            idToken: req.body.tokenGoogle,
-            audience: "752137312998-3tnsnm0ci53910fgr3ud1uoormpcs6l1.apps.googleusercontent.com",  
-        })
-        .then(ticket => {
-            email = ticket.getPayload().email
-            return User.findOne({
-                where:{email}
-            })
-        })
-        .then(user => {
-            if (user) return user
-
-            return User.create({
-                email : email,
-                password : 'rahasiaaja' 
-            })
-            
-        })
-        .then(user => {
-            let payload = {
-                id : user.id,
-                email : user.email
+    static googleSign(req, res, next) {
+        let { google_token } = req.body
+        const client = new OAuth2Client(process.env.CLIENT_ID);
+        verify()
+        async function verify() {
+            try {
+                const ticket = await client.verifyIdToken({
+                    idToken: google_token,
+                    audience: process.env.CLIENT_ID,
+                });
+                const payload = ticket.getPayload();
+                const user = await User.findOne({
+                    where: {
+                        email: payload.email
+                    }
+                })
+                if (!user) {
+                    user = await User.create({
+                        email: payload.email,
+                        password: google_token
+                    })
+                }
+                let token = genToken({ id: user.id, email: user.email })
+                res.status(200).json({ token })
+            } catch (err) {
+                next(err)
             }
-            let token = genToken(payload);
-            res.status(200).json({token});
-        })
-        .catch(err => {
-            console.log(err);
-            next(err);
-        })
+        }
     }
+
 }
 
 module.exports = UserController;
